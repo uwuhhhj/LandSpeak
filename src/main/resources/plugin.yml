@@ -3,4 +3,11 @@ version: '1.0.0'
 main: io.github.loliiiico.landSpeak.LandSpeak
 api-version: '1.21'
 authors: [ Loliiiico ]
-description: some essentials addon
+description: Control Simple Voice Chat speak ability via Lands flags
+depend:
+  - Lands
+  - voicechat
+permissions:
+  landspeak.bypass:
+    description: Bypass speak flag restrictions everywhere
+    default: op

@@ -55,6 +55,14 @@
             <id>papermc-repo</id>
             <url>https://repo.papermc.io/repository/maven-public/</url>
         </repository>
+		<repository>
+		    <id>jitpack.io</id>
+		    <url>https://jitpack.io</url>
+		</repository>
+        <repository>
+            <id>maxhenkel</id>
+            <url>https://maven.maxhenkel.de/repository/public</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -64,5 +72,19 @@
             <version>1.21.4-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
+        <!-- Simple Voice Chat API (provided at runtime) -->
+        <dependency>
+            <groupId>de.maxhenkel.voicechat</groupId>
+            <artifactId>voicechat-api</artifactId>
+            <version>2.6.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <!-- Lands API (provided at runtime). Coordinates may vary across versions. -->
+	    <dependency>
+	        <groupId>com.github.Angeschossen</groupId>
+	        <artifactId>LandsAPI</artifactId>
+	        <version>7.15.20</version>
+            <scope>provided</scope>
+	    </dependency>
     </dependencies>
 </project>
