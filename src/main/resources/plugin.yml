@@ -1,0 +1,6 @@
+name: LandSpeak
+version: '1.0.0'
+main: io.github.loliiiico.landSpeak.LandSpeak
+api-version: '1.21'
+authors: [ Loliiiico ]
+description: some essentials addon
