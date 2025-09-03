@@ -17,6 +17,19 @@ public class VoiceHook implements VoicechatPlugin {
 
     private final LandSpeak plugin;
     private final Supplier<LandsHook> landsSupplier;
+    private static final long CACHE_MILLIS = 3000L;
+
+    private static final class CacheEntry {
+        final boolean allowed;
+        final long expiry;
+
+        CacheEntry(boolean allowed, long expiry) {
+            this.allowed = allowed;
+            this.expiry = expiry;
+        }
+    }
+
+    private final java.util.concurrent.ConcurrentHashMap<java.util.UUID, CacheEntry> speakCache = new java.util.concurrent.ConcurrentHashMap<>();
 
     public VoiceHook(LandSpeak plugin, Supplier<LandsHook> landsSupplier) {
         this.plugin = plugin;
@@ -61,13 +74,24 @@ public class VoiceHook implements VoicechatPlugin {
             if (lands == null) {
                 return; // no lands, do not block
             }
-            boolean allowed = lands.canSpeak(player);
+            long now = System.currentTimeMillis();
+            CacheEntry entry = speakCache.get(player.getUniqueId());
+            boolean cacheHit = entry != null && entry.expiry > now;
+            boolean allowed = cacheHit ? entry.allowed : lands.canSpeak(player);
+            if (!cacheHit) {
+                speakCache.put(player.getUniqueId(), new CacheEntry(allowed, now + CACHE_MILLIS));
+            }
+
             if (!allowed) {
                 event.cancel();
-                player.sendMessage("§c你当前区域被禁止发言");
+                // Only send denial message when we refresh the cache (i.e., once per 3s)
+                if (!cacheHit) {
+                    player.sendMessage("§c你在当前区域被塞上了口球");
+                }
             }
         } catch (Throwable t) {
             plugin.getLogger().warning("Voice event handling error: " + t.getMessage());
         }
     }
+
 }
